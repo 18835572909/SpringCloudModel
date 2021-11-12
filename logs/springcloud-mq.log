@@ -1,0 +1,28 @@
+[2021-11-12 18:52:20] [ERROR] |main| [org.springframework.boot.diagnostics.LoggingFailureAnalysisReporter:40] -- 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Failed to bind properties under 'logging.level' to java.util.Map<java.lang.String, org.springframework.boot.logging.LogLevel>:
+
+    Reason: org.springframework.core.convert.ConverterNotFoundException: No converter found capable of converting from type [java.lang.String] to type [java.util.Map<java.lang.String, org.springframework.boot.logging.LogLevel>]
+
+Action:
+
+Update your application's configuration
+
+[2021-11-12 18:53:19] [INFO ] |main| [com.rhb.mq.MqApplication:55] -- Starting MqApplication using Java 1.8.0_152 on 42105GZ0031 with PID 11260 (D:\opensource\SpringCloudModel\rabbitmq\target\classes started by renhuibo in D:\opensource\SpringCloudModel)
+[2021-11-12 18:53:19] [INFO ] |main| [com.rhb.mq.MqApplication:659] -- No active profile set, falling back to default profiles: default
+[2021-11-12 18:53:20] [INFO ] |main| [org.springframework.boot.web.embedded.tomcat.TomcatWebServer:108] -- Tomcat initialized with port(s): 10000 (http)
+[2021-11-12 18:53:20] [INFO ] |main| [org.apache.coyote.http11.Http11NioProtocol:173] -- Initializing ProtocolHandler ["http-nio-10000"]
+[2021-11-12 18:53:20] [INFO ] |main| [org.apache.catalina.core.StandardService:173] -- Starting service [Tomcat]
+[2021-11-12 18:53:20] [INFO ] |main| [org.apache.catalina.core.StandardEngine:173] -- Starting Servlet engine: [Apache Tomcat/9.0.54]
+[2021-11-12 18:53:20] [INFO ] |main| [org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]:173] -- Initializing Spring embedded WebApplicationContext
+[2021-11-12 18:53:20] [INFO ] |main| [org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext:290] -- Root WebApplicationContext: initialization completed in 695 ms
+[2021-11-12 18:53:20] [INFO ] |main| [org.apache.coyote.http11.Http11NioProtocol:173] -- Starting ProtocolHandler ["http-nio-10000"]
+[2021-11-12 18:53:21] [INFO ] |main| [org.springframework.boot.web.embedded.tomcat.TomcatWebServer:220] -- Tomcat started on port(s): 10000 (http) with context path ''
+[2021-11-12 18:53:21] [INFO ] |main| [com.rhb.mq.MqApplication:61] -- Started MqApplication in 2.154 seconds (JVM running for 3.168)
+[2021-11-12 18:53:21] [INFO ] |main| [com.rhb.mq.MqApplication:28] -- Mq Application Start ... 
