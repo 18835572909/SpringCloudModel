@@ -1,0 +1,32 @@
+# RabbitMq
+spring:
+  rabbitmq:
+    host: 124.71.80.133
+    port: 5672
+    username: root
+    password: Ngd3zEBPHkY2CX4g
+    connection-timeout: 50s
+    ## 生成者发送过程的可靠性传输
+    publisher-returns: true
+    publisher-confirm-type: correlated
+    listener:
+      simple:
+        ## 每次消费一条信息
+        prefetch: 1
+        ## 开启批量消费
+        consumer-batch-enabled: false
+        ## 并发数
+        concurrency: 1
+        ## 最大并发数
+        max-concurrency: 1
+        ## 消费者可靠性： 消费者回执ack，设置为手动
+        acknowledge-mode: manual
+        ## 开启重试机制
+        retry:
+          enabled: true
+          max-attempts: 3
+          initial-interval: 1s
+          max-interval: 30s
+
+
+
