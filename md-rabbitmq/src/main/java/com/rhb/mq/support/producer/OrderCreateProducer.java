@@ -25,6 +25,6 @@ public class OrderCreateProducer{
     map.put("fuck you","batch");
     map.put("good-bye","Oh,My God");
     String msg = JSONUtil.toJsonStr(map);
-    baseProducer.send(QueueConstant.ORDER_TOPIC_EXCHANGE,QueueConstant.ORDER_CREATE_QUEUE_ROUTE_KEY,map);
+    baseProducer.send(QueueConstant.ORDER_TOPIC_EXCHANGE,QueueConstant.ORDER_CREATE_QUEUE_ROUTE_KEY,msg);
   }
 }

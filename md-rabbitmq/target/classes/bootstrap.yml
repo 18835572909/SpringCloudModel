@@ -1,5 +1,29 @@
-# RabbitMq
 spring:
+  application:
+    name: md-rabbitmq
+  cloud:
+    nacos:
+      username: nacos
+      password: pUJW4EFDxVrQLhia
+      server-addr: 124.71.80.133:8848
+      config:
+        enabled: true
+        refresh-enabled: true
+        encode: UTF-8
+        namespace: c0ac6709-b399-4ab3-8874-20e183906c75
+        timeout: 5000
+        extension-configs:
+          - dataId: rabbitmq.yml
+            group: MQ_GROUP
+            refresh: true
+          - dataId: system.yml
+            group: MQ_GROUP
+            refresh: true
+      discovery:
+        enabled: true
+        namespace: c0ac6709-b399-4ab3-8874-20e183906c75
+        heart-beat-interval: 1000
+
   rabbitmq:
     host: 124.71.80.133
     port: 5672
@@ -25,20 +49,11 @@ spring:
         ## 开启重试机制
         retry:
           enabled: true
-          max-attempts: 3
-          initial-interval: 1s
-          max-interval: 30s
-  redis:
-    host: 124.71.80.133
-    port: 6379
-    password: LOQYkOKUgUBrywjo
-    jedis:
-      pool:
-        max-active: 8
-        max-wait: -1
-        max-idle: 500
-        min-idle: 0
-    lettuce:
-      shutdown-timeout: 0
+          max-attempts: 5
+          max-interval: 10s   # 重试最大间隔时间
+          initial-interval: 2s  # 重试初始间隔时间
+          multiplier: 2 # 间隔时间乘子，间隔时间*乘子=下一次的间隔时间，最大不能超过设置的最大间隔时间
+
+
 
 

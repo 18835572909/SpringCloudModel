@@ -2,7 +2,7 @@ package com.rhb.mq.support.queue;
 
 import com.rhb.mq.support.constant.QueueConstant;
 import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.Exchange;
+import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.context.annotation.Bean;
@@ -17,17 +17,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class SampleQueue {
 
-  @Bean
-  public Queue queue(){
+  @Bean("orderCreateQueue")
+  public Queue orderCreateQueue(){
     return new Queue(QueueConstant.ORDER_CREATE_QUEUE);
   }
 
-  public Exchange exchange(){
+  @Bean("orderTopicExchange")
+  public TopicExchange orderTopicExchange(){
     return new TopicExchange(QueueConstant.ORDER_TOPIC_EXCHANGE);
   }
 
-  public Binding binding(){
-    return new Binding()
+  @Bean
+  public Binding binding(Queue orderCreateQueue,TopicExchange orderTopicExchange){
+    return BindingBuilder.bind(orderCreateQueue).to(orderTopicExchange).with(QueueConstant.ORDER_CREATE_QUEUE_ROUTE_KEY);
   }
-
 }

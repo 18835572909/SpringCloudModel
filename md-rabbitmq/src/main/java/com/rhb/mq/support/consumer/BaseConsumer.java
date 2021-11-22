@@ -69,9 +69,9 @@ public abstract class BaseConsumer {
     String messageId = message.getMessageProperties().getMessageId();
     log.info("messageId:{}",messageId);
     SetOperations<String, String> mqMsgIdSet = redisTemplate.opsForSet();
-    if(StrUtil.isNotEmpty(messageId)
-        && null != mqMsgIdSet
-        && mqMsgIdSet.isMember(RedisKeyConstant.MQ_MESSAGE_ID,messageId)){
+    Boolean existsMsg = mqMsgIdSet.isMember(RedisKeyConstant.MQ_MESSAGE_ID, messageId);
+    if(null == existsMsg || !existsMsg){
+      log.info("冥等性校验，丢弃当前信息：{}",messageId);
       return;
     }
     try{

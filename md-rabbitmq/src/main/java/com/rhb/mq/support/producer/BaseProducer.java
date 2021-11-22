@@ -24,7 +24,7 @@ public class BaseProducer {
   RabbitTemplate rabbitTemplate;
 
   @Resource
-  RedisTemplate redisTemplate;
+  RedisTemplate<String,String> redisTemplate;
 
   /**
    * MQ发送基础方法
@@ -33,15 +33,14 @@ public class BaseProducer {
    * @param routingKey 路由键
    * @param msg 消息实体
    */
-  public void send(String exchange, String routingKey, Object msg){
+  public void send(String exchange, String routingKey, String msg){
     /**
      * convertSendAndReceive() :  确定消费者接收到消息，才会发送下一条信息，每条消息之间会有间隔时间
      * convertAndSend() :  没有顺序，不需要等待，直接运行
      */
     rabbitTemplate.convertAndSend(exchange,routingKey,msg,message -> {
       String msgId = ""+SnowFlakeUtil.getId();
-      message.getMessageProperties()
-          .setMessageId(msgId);
+      message.getMessageProperties().setMessageId(msgId);
       redisTemplate.opsForSet().add(RedisKeyConstant.MQ_MESSAGE_ID,msgId);
       message.getMessageProperties()
           .setContentType(MessageProperties.CONTENT_TYPE_JSON);

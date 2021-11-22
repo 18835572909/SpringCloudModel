@@ -3,7 +3,6 @@ package com.rhb.mq.support.consumer;
 import com.rabbitmq.client.Channel;
 import com.rhb.mq.support.constant.QueueConstant;
 import com.rhb.mq.support.consumer.service.MqOrderService;
-import com.rhb.mq.support.type.SysQueueEnum;
 import javax.annotation.Resource;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.Exchange;
@@ -26,7 +25,7 @@ public class OrderCreateConsumer extends BaseConsumer {
 
   @RabbitListener(bindings = @QueueBinding(
       value = @Queue(value = QueueConstant.ORDER_CREATE_QUEUE,durable = "true"),
-      exchange = @Exchange(value = QueueConstant.ORDER_TOPIC_EXCHANGE,durable = "true",ignoreDeclarationExceptions = "true"),
+      exchange = @Exchange(value = QueueConstant.ORDER_TOPIC_EXCHANGE,type = "topic"),
       key = QueueConstant.ORDER_CREATE_QUEUE_ROUTE_KEY))
   @Override
   public void consume(Message message, Channel channel, String msg) {
