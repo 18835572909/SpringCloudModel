@@ -29,6 +29,6 @@ public class SampleQueue {
 
   @Bean
   public Binding binding(Queue orderCreateQueue,TopicExchange orderTopicExchange){
-    return BindingBuilder.bind(orderCreateQueue).to(orderTopicExchange).with(QueueConstant.ORDER_CREATE_QUEUE_ROUTE_KEY);
+    return BindingBuilder.bind(orderCreateQueue).to(orderTopicExchange).with(QueueConstant.ORDER_CREATE_ROUTE_KEY);
   }
 }

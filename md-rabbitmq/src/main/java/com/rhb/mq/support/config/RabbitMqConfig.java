@@ -2,6 +2,7 @@ package com.rhb.mq.support.config;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
  * @author renhuibo
  * @date 2021/11/15 17:09
  */
+@Slf4j
 @Configuration
 public class RabbitMqConfig {
 
@@ -33,12 +35,14 @@ public class RabbitMqConfig {
     rabbitTemplate.setConfirmCallback(((correlationData, ack, cause) -> {
       if(!ack){
         //记录日志、发送邮件通知、落库定时任务扫描重发
+        log.info("消息发送交换机失败，请及时查看\n data:{}\ncause:{}",correlationData,cause);
       }
     }));
 
     //当消息成功发送到交换机，没有路由到队列触发此监听
     rabbitTemplate.setReturnsCallback(returnedMessage -> {
       //记录日志、发送邮件通知、落库定时任务扫描重发
+      log.info("路由到队列失败，请及时查看\n returnedMessage:{}",returnedMessage);
     });
   }
 

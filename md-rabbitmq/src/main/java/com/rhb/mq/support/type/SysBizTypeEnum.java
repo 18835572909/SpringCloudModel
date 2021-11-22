@@ -16,7 +16,9 @@ public enum SysBizTypeEnum {
    * 业务类型
    */
   SYS_DEFAULT("系统默认"),
-  ORDER_CREATE("订单创建");
+  ORDER_CREATE("订单创建"),
+  ORDER_PAY("订单支付"),
+  ;
 
   private String desc;
 
