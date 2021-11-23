@@ -83,20 +83,39 @@ public abstract class BaseConsumer {
       sysQueueMessage.setBizId(bizId);
       channel.basicAck(deliveryTag,false);
       sysQueueMessage.setConsumeTag(1);
-    } catch (Exception e){
+    } catch (RuntimeException re){
+      log.info("runtime exception ...");
+      sysQueueMessage.setErrLog(ExceptionUtil.getMessage(re));
+      sysQueueMessage.setConsumeTag(0);
+      sysQueueMessage.setOverDate(new Date());
+      // TODO 消息落盘
+      log.info("Sys.Msg：{}", JSONUtil.parseObj(sysQueueMessage).toString());
+
+      try {
+        channel.basicNack(deliveryTag,false,false);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+
+      throw new RuntimeException("运行异常。。。");
+    }catch (Exception e){
+      log.info("exception ...");
       sysQueueMessage.setErrLog(ExceptionUtil.getMessage(e));
       try {
         /**
          * 第三个参数: 是否重回队列(容易出现死循环)
+         * deliveryTag- 收到的标签AMQP.Basic.GetOk或AMQP.Basic.Deliver
+         * multiple- true 拒绝所有消息，包括提供的交付标签；false 仅拒绝提供的交付标签。
+         * requeue - 如果被拒绝的消息应该重新排队而不是丢弃/死信，则为真
+         *    (false：通俗的讲，消费失败直接丢弃。 true：消息重新排队)
          */
         sysQueueMessage.setConsumeTag(0);
-        channel.basicNack(deliveryTag,false,true);
+        channel.basicNack(deliveryTag,false,false);
       } catch (IOException e1) {
         log.info("拒签失败：{}",e1.getCause());
       }
     }
     sysQueueMessage.setOverDate(new Date());
-
     // TODO 消息落盘
     log.info("Sys.Msg：{}", JSONUtil.parseObj(sysQueueMessage).toString());
   }

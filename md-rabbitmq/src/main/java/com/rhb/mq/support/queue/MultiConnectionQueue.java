@@ -16,13 +16,13 @@ import org.springframework.stereotype.Component;
  * @author renhuibo
  * @date 2021/11/23 15:25
  */
-@Component
+//@Component
 public class MultiConnectionQueue {
 
-  @Resource(name = "defaultConnectionFactory")
+//  @Resource(name = "defaultConnectionFactory")
   ConnectionFactory defaultConnectionFactory;
 
-  @Resource(name = "orderConnectionFactory")
+//  @Resource(name = "orderConnectionFactory")
   ConnectionFactory orderConnectionFactory;
 
   @Bean

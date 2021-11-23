@@ -26,7 +26,7 @@ public class OrderCreateConsumer extends BaseConsumer {
   @RabbitListener(bindings = @QueueBinding(
       value = @Queue(value = QueueConstant.ORDER_CREATE_QUEUE,durable = "true"),
       exchange = @Exchange(value = QueueConstant.ORDER_TOPIC_EXCHANGE,type = "topic"),
-      key = QueueConstant.ORDER_CREATE_ROUTE_KEY),containerFactory = "orderContainerFactory")
+      key = QueueConstant.ORDER_CREATE_ROUTE_KEY))
   @Override
   public void consume(Message message, Channel channel, String msg) {
     super.consume(message,channel,msg,QueueConstant.ORDER_VHOST,QueueConstant.ORDER_CREATE_QUEUE);
@@ -34,6 +34,6 @@ public class OrderCreateConsumer extends BaseConsumer {
 
   @Override
   public String execute(String msg) {
-    return mqOrderService.createOrder(msg);
+    throw new RuntimeException("主动抛出");
   }
 }
