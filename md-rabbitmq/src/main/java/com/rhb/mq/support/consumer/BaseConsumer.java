@@ -4,6 +4,7 @@ import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.rabbitmq.client.Channel;
+import com.rhb.mq.support.constant.QueueConstant;
 import com.rhb.mq.support.constant.RedisKeyConstant;
 import com.rhb.mq.support.entity.SysQueueMessage;
 import com.rhb.mq.support.type.SysQueueEnum;
@@ -39,7 +40,7 @@ public abstract class BaseConsumer {
    */
   public void consume(Message message, Channel channel, String msg, String vhost, String queue){
     if(StrUtil.isEmpty(vhost)){
-      vhost = "/";
+      vhost = QueueConstant.DEFAULT_VHOST;
     }
 
     Assert.isTrue(StrUtil.isNotEmpty(queue),"参数错误：BaseProducer#send.queue");
@@ -67,7 +68,7 @@ public abstract class BaseConsumer {
      * 冥等性
      */
     String messageId = message.getMessageProperties().getMessageId();
-    log.info("messageId:{}",messageId);
+    sysQueueMessage.setMsgId(messageId);
     SetOperations<String, String> mqMsgIdSet = redisTemplate.opsForSet();
     Boolean existsMsg = mqMsgIdSet.isMember(RedisKeyConstant.MQ_MESSAGE_ID, messageId);
     if(null == existsMsg || !existsMsg){
@@ -82,7 +83,7 @@ public abstract class BaseConsumer {
       sysQueueMessage.setBizId(bizId);
       channel.basicAck(deliveryTag,false);
       sysQueueMessage.setConsumeTag(1);
-    }catch (IOException e){
+    } catch (Exception e){
       sysQueueMessage.setErrLog(ExceptionUtil.getMessage(e));
       try {
         /**
@@ -93,14 +94,10 @@ public abstract class BaseConsumer {
       } catch (IOException e1) {
         log.info("拒签失败：{}",e1.getCause());
       }
-    }catch (Exception e){
-      sysQueueMessage.setErrLog(ExceptionUtil.getMessage(e));
     }
     sysQueueMessage.setOverDate(new Date());
 
-    /**
-     * 消息落盘DB
-     */
+    // TODO 消息落盘
     log.info("Sys.Msg：{}", JSONUtil.parseObj(sysQueueMessage).toString());
   }
 
@@ -115,9 +112,9 @@ public abstract class BaseConsumer {
   /**
    * 消费调用
    *
-   * @param message
-   * @param channel
-   * @param msg
+   * @param message 消费信息
+   * @param channel channel
+   * @param msg 消费body
    */
   public abstract void consume(Message message, Channel channel, String msg);
 

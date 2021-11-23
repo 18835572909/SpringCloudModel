@@ -22,6 +22,8 @@ public class SysQueueMessage {
 
   private String msg;
 
+  private String msgId;
+
   private SysQueueEnum queueEnum;
   // 业务类型
   private SysBizTypeEnum bizTypeEnum;

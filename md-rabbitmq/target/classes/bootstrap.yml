@@ -11,7 +11,7 @@ spring:
         refresh-enabled: true
         encode: UTF-8
         namespace: c0ac6709-b399-4ab3-8874-20e183906c75
-        timeout: 5000
+        timeout: 30000
         extension-configs:
           - dataId: rabbitmq.yml
             group: MQ_GROUP

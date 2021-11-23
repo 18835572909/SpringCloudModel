@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 public class BaseProducer {
 
   @Resource
-  RabbitTemplate rabbitTemplate;
+  RabbitTemplate orderRabbitTemplate;
 
   @Resource
   RedisTemplate<String,String> redisTemplate;
@@ -39,7 +39,7 @@ public class BaseProducer {
      * convertAndSend() :  没有顺序，不需要等待，直接运行
      */
     log.info("\n> 发送信息 : \nexchange: {}\nrouteKey: {} ",exchange,routingKey);
-    rabbitTemplate.convertAndSend(exchange,routingKey,msg,message -> {
+    orderRabbitTemplate.convertAndSend(exchange,routingKey,msg,message -> {
       String msgId = ""+SnowFlakeUtil.getId();
       message.getMessageProperties().setMessageId(msgId);
       redisTemplate.opsForSet().add(RedisKeyConstant.MQ_MESSAGE_ID,msgId);

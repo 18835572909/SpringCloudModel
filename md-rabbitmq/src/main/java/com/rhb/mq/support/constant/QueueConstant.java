@@ -57,4 +57,10 @@ public class QueueConstant {
   public static final String ORDER_DELAY_EXCHANGE = "order."+DELAY_EXCHANGE;
   public static final String ORDER_DELAY_ROUTE_KEY = "order."+DELAY_ROUTE_KEY;
 
+  /**
+   * 测试MQ的多数据源
+   */
+  public static final String MULTI_T1_QUEUE = "multi.t1.queue";
+  public static final String MULTI_T2_QUEUE = "multi.t2.queue";
+
 }
