@@ -1,11 +1,15 @@
 package com.rhb.mq.support.config;
 
+import com.rhb.mq.support.constant.QueueConstant;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.retry.MessageRecoverer;
+import org.springframework.amqp.rabbit.retry.RepublishMessageRecoverer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.amqp.SimpleRabbitListenerContainerFactoryConfigurer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -53,6 +57,18 @@ public class RabbitMqConfig2 {
       //记录日志、发送邮件通知、落库定时任务扫描重发
       log.info("路由到队列失败，请及时查看\n returnedMessage:{}",returnedMessage);
     });
+  }
+
+  /**
+   * 重试次数消耗完后，处理策略（3种）
+   * RejectAndDontRequeueRecoverer：重试耗尽后，直接reject，丢弃消息。默认就是这种方式
+   * ImmediateRequeueMessageRecoverer：重试耗尽后，返回nack，消息重新入队
+   * RepublishMessageRecoverer：重试耗尽后，将失败消息投递到指定的交换机（死信）
+   */
+  @Bean
+  public MessageRecoverer retryFailStrategy(){
+//    return new DefaultMessageRecoverer();
+    return new RepublishMessageRecoverer(rabbitTemplate, QueueConstant.DEAD_LETTER_EXCHANGE,QueueConstant.DEAD_LETTER_ROUTE_KEY);
   }
 
 }

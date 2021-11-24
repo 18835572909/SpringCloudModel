@@ -8,6 +8,7 @@ import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.QueueBuilder;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -20,8 +21,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class SeniorQueue {
 
-  @Bean("delayQueue")
-  public Queue delayQueue(){
+  @Bean("orderDelayQueue")
+  public Queue orderDelayQueue(){
     Map<String,Object> args = new HashMap<>(3);
     args.put("x-dead-letter-exchange",QueueConstant.ORDER_DEAD_LETTER_EXCHANGE);
     args.put("x-dead-letter-routing-key",QueueConstant.ORDER_DEAD_LETTER_ROUTE_KEY);
@@ -29,29 +30,50 @@ public class SeniorQueue {
     return QueueBuilder.durable(QueueConstant.ORDER_DELAY_QUEUE).withArguments(args).build();
   }
 
-  @Bean("delayExchange")
-  public DirectExchange delayExchange(){
+  @Bean("orderDelayExchange")
+  public DirectExchange orderDelayExchange(){
     return new DirectExchange(QueueConstant.ORDER_DELAY_EXCHANGE);
   }
 
   @Bean
-  public Binding delayBinding(){
-    return BindingBuilder.bind(delayQueue()).to(delayExchange()).with(QueueConstant.ORDER_DELAY_ROUTE_KEY);
+  public Binding orderDelayBinding(
+      @Qualifier("orderDelayQueue") Queue orderDelayQueue,
+      @Qualifier("orderDelayExchange") DirectExchange orderDelayExchange){
+    return BindingBuilder.bind(orderDelayQueue).to(orderDelayExchange).with(QueueConstant.ORDER_DELAY_ROUTE_KEY);
   }
 
-  @Bean("dlxQueue")
-  public Queue dlxQueue(){
+  @Bean("orderDlxQueue")
+  public Queue orderDlxQueue(){
     return new Queue(QueueConstant.ORDER_DEAD_LETTER_QUEUE);
   }
 
-  @Bean("dlxExchange")
-  public DirectExchange dlxExchange(){
+  @Bean("orderDlxExchange")
+  public DirectExchange orderDlxExchange(){
     return new DirectExchange(QueueConstant.ORDER_DEAD_LETTER_EXCHANGE);
   }
 
   @Bean
-  public Binding dlxBinding(){
-    return BindingBuilder.bind(dlxQueue()).to(dlxExchange()).with(QueueConstant.ORDER_DEAD_LETTER_ROUTE_KEY);
+  public Binding orderDlxBinding(
+      @Qualifier("orderDlxQueue") Queue orderDlxQueue,
+      @Qualifier("orderDlxExchange") DirectExchange orderDlxExchange){
+    return BindingBuilder.bind(orderDlxQueue).to(orderDlxExchange).with(QueueConstant.ORDER_DEAD_LETTER_ROUTE_KEY);
+  }
+
+  @Bean("dlxQueue")
+  public Queue dlxQueue(){
+    return new Queue(QueueConstant.DEAD_LETTER_QUEUE);
+  }
+
+  @Bean("dlxExchange")
+  public DirectExchange dlxExchange(){
+    return new DirectExchange(QueueConstant.DEAD_LETTER_EXCHANGE);
+  }
+
+  @Bean
+  public Binding dlxBinding(
+      @Qualifier("dlxQueue") Queue dlxQueue,
+      @Qualifier("dlxExchange") DirectExchange dlxExchange){
+    return BindingBuilder.bind(dlxQueue).to(dlxExchange).with(QueueConstant.DEAD_LETTER_ROUTE_KEY);
   }
 
 }
