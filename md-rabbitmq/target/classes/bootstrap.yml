@@ -53,6 +53,21 @@ spring:
           max-interval: 10s   # 重试最大间隔时间
           initial-interval: 2s  # 重试初始间隔时间
           multiplier: 2 # 间隔时间乘子，间隔时间*乘子=下一次的间隔时间，最大不能超过设置的最大间隔时间
+    multi:
+      default:
+        host: 124.71.80.133
+        port: 5672
+        username: root
+        password: Ngd3zEBPHkY2CX4g
+        vhost: /
+        queue: multi.t1.queue
+      order:
+        host: 124.71.80.133
+        port: 5672
+        username: root
+        password: Ngd3zEBPHkY2CX4g
+        vhost: order
+        queue: multi.t2.queue
 
 
 
